@@ -8,9 +8,9 @@ import java.util.HashMap;
  * 三, 数组中的重复数字
  * 	方法一：蛮力发
  *  方法二：空间换时间
+ *  方法三：标准答案
  */
 public class DutyNumber {
-	
 	
 	
 	public static void main(String[] args) {
