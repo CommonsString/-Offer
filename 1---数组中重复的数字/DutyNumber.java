@@ -28,6 +28,12 @@ public class DutyNumber {
 	public static int findDutyNumber(int[] arr){
 		//参数检查
 		if(arr.length < 1 || arr == null) return -1;
+		//题设的参数范围
+		for(int i = 0; i < arr.length; i++){
+			if(arr[i] < 0 || arr[i] > arr.length - 1){
+				return -1;
+			}
+		}
 		//数组排序
 		Arrays.sort(arr);
 		for(int i = 0, len = arr.length; i < len; i++){
@@ -55,6 +61,12 @@ public class DutyNumber {
 	@SuppressWarnings("unchecked")
 	public static int findDutyNumberSecond(int[] arr){
 		if(arr.length < 1 || arr == null) return -1;
+		//题设的参数范围
+		for(int i = 0; i < arr.length; i++){
+			if(arr[i] < 0 || arr[i] > arr.length - 1){
+				return -1;
+			}
+		}
 		//创建哈希表
 		@SuppressWarnings("rawtypes")
 		HashMap table = new HashMap();
@@ -82,6 +94,13 @@ public class DutyNumber {
 	 */
 	public static int findDutyNumberThreed(int[] arr){
 		if(arr.length < 1 || arr == null) return -1;
+		//题设的参数范围
+		for(int i = 0; i < arr.length; i++){
+			if(arr[i] < 0 || arr[i] > arr.length - 1){
+				return -1;
+			}
+		}
+		
 		for(int i = 0, len = arr.length; i < len; i++){
 			while(arr[i] != i){
 				//相等, 找出重复数字
