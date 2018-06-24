@@ -1,6 +1,6 @@
 package strcut;
 
-
+import java.util.Stack;
 
 /**
  * @author commonsstring@gmail.com
@@ -27,8 +27,172 @@ public class BinaryThree {
 	//右孩子
 	private BinaryThree right = null;
 	
+	//后序遍历, 结点是否第一次处于栈顶
+	private boolean isFlag = false;
+	
 	public BinaryThree(int value) {
 		this.data = value;
+	}
+	
+	
+	//二叉树的高度, 分别求左右子树的高度, 然后取较长的子树作为数的高度
+	public static int getHeight(BinaryThree head){
+		//根为空, 高度为0
+		if(head == null) return 0;
+		int height = 0;
+		int leftHeight = getHeight(head.getLeft());
+		int rightHeight = getHeight(head.getRight());
+		height = leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+		return height;
+	}
+	
+	//遍历操作, 递归前序遍历
+	public static void recursivePreorderShow(BinaryThree head){
+		if(head == null){
+			return ;
+		}
+		System.out.print(head.getData() + " ");
+		recursivePreorderShow(head.getLeft());
+		recursivePreorderShow(head.getRight());
+	}
+	
+	//非递归前序遍历
+	//https://www.cnblogs.com/hapjin/p/5679482.html
+	public static void PreorderShow(BinaryThree head){
+		if(head == null) return ;
+		//辅助栈
+		Stack<BinaryThree> myStack = new Stack<BinaryThree>();
+		BinaryThree current = head;
+		BinaryThree tempNode = null;
+		while(true){
+			//根节点, 一直访问左结点
+			while(current != null){
+				System.out.print(current.getData() + " ");
+				myStack.push(current);
+				current = current.getLeft();
+			}
+			//访问右结点
+			if(myStack.isEmpty()) break;
+			tempNode = myStack.pop();
+			current = tempNode.getRight();
+		}
+	}
+	
+	//递归中序遍历
+	public static void recursiveMiddleOrder(BinaryThree head){
+		if(head == null) return ;
+		recursiveMiddleOrder(head.getLeft());
+		System.out.print(head.getData() + " ");
+		recursiveMiddleOrder(head.getRight());
+	}
+	
+	
+	//非递归, 中序遍历
+	public static void MiddleOrder(BinaryThree head){
+		if(head == null) return ;
+		//辅助栈
+		Stack<BinaryThree> myStack = new Stack<BinaryThree>();
+		BinaryThree current = head;
+		BinaryThree tempNode = null;
+		while(current != null || !myStack.isEmpty()){
+			//从根节点一直走到最左下的结点
+			while(current != null){
+				myStack.push(current);
+				current = current.getLeft();
+			}
+			//出栈, 并打印
+			if(!myStack.isEmpty()){
+				tempNode = myStack.pop();
+				System.out.print(tempNode.getData() + " ");
+				//当前弹出的右结点
+				current = tempNode.getRight();
+			}
+		}
+	}
+	
+	//递归后序遍历
+	public static void recursiveLastOrder(BinaryThree head){
+		if(head == null) return ;
+		recursiveLastOrder(head.getLeft());
+		recursiveLastOrder(head.getRight());
+		System.out.print(head.getData() + " ");
+	}
+	
+	/**
+	 * 非递归后序遍历(书上的代码, 待修改)
+	 * 后序遍历, 每个结点需要访问两次, 即在遍历完左子树后需要访问当前结点, 之后遍历完右子树之后还需要访问当前结点
+	 * 但是, 只有在第二次访问时才处理当前结点
+	 * 如何区分, 是遍历完左子树后的返回, 还是遍历完右子树后的返回？
+	 * 解决方案：
+	 * 		当从栈中出栈一个元素, 检查这个元素与栈顶元素的右结点是否相同。
+	 * 		相同, 说明已经完成左右子树的遍历, 此时只需要再将栈顶元素出栈一次, 并输出该节点是数据即可。
+	 */
+	public static void lastOrder(BinaryThree head){
+		if(head == null) return ;
+		Stack<BinaryThree> myStack = new Stack<BinaryThree>();
+		BinaryThree current = head;
+		while(true){
+			//遍历左子树
+			if(current != null){
+				myStack.push(current);
+				current = current.getLeft();
+			}else{
+				if(myStack.isEmpty()){
+					System.out.println("Stack is empty!");
+					return ;
+				}else{
+					//栈顶元素的右孩子
+					if(myStack.peek().getRight() == null){
+						//出栈一个元素
+						BinaryThree temp = myStack.pop();
+						//出栈元素(结点)与当前栈顶元素的右结点是否相等
+						System.out.print(temp.getData() + " ");
+						if(temp == myStack.peek().getRight()){
+							//相等, 说明左右子树已经遍历完毕, 栈顶元素出栈处理
+							System.out.print(myStack.peek().getData() + " ");
+							myStack.pop();
+						}
+					}
+				}
+				if(!myStack.isEmpty()){
+					current = myStack.peek().getRight();
+				}else{
+					current = null;
+				}
+			}
+		}
+	}
+
+	/**
+	 * 非递归后序遍历
+	 * 后序遍历, 需要把左右子树访问完成之后, 才能处理访问根结点。
+	 * 所以, 根结点出现在栈顶不能立马去访问它, 还需要确定它的左右子树是否被访问。
+	 * 设置一个变量, 记录当前栈顶结点是否可以被访问, 可以弹出处理, 不可以需要把左右子树分别入栈。 
+	 */
+	public static void lastOrderSecond(BinaryThree head){
+		if(head == null) return;
+		Stack<BinaryThree> myStack = new Stack<BinaryThree>();
+		BinaryThree current = head;
+		BinaryThree temp = null;
+		while(true){
+			//入栈左结点
+			while(current != null){
+				myStack.push(current);
+				current = current.getLeft();
+			}
+			if(myStack.isEmpty()) break;
+			//获取栈顶
+			temp = myStack.peek();
+			//从左子树返回, 需要判断右子树是否已经被访问
+			if(temp.isFlag == false){
+				temp.isFlag = true;
+				current = temp.getRight();
+			}else{
+				//左右已经遍历, 处理当前结点
+				temp = myStack.pop();
+				System.out.print(temp.getData() + " ");
+			}
+		}
 	}
 	
 	//查找一个元素
@@ -167,9 +331,10 @@ public class BinaryThree {
 		node6.setRight(node8);
 		node8.setLeft(node7);
 		node8.setRight(node9);
-		System.out.println(BinaryThree.delete(head, 5));
-		System.out.println(BinaryThree.find(head, 5));
-		System.out.println(node6.getRight().getData());
+		
+		recursiveLastOrder(head);
+		System.out.println();
+		lastOrderSecond(head);
 	}
 	
 	public int getData() {
