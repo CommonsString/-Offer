@@ -10,7 +10,7 @@ package jianzhiOffer;
 public class PrintMaxNumber {
 
 	public static void main(String[] args) {
-		printC(2);
+		printD(2);
 	}
 	/**
 	 * 方法一：蛮力法则
@@ -95,6 +95,7 @@ public class PrintMaxNumber {
 		int len = number.length - 1;
 		for(int i = len; i >= 0; i--){
 			int nSum = number[i] - '0' + carry;
+			//每次从最低位, 即数组下标最大开始计算
 			if(i == len) nSum++;
 			if(nSum >= 10){
 				//在最高位进位, 说明已经打印完毕
@@ -116,6 +117,10 @@ public class PrintMaxNumber {
 		return isOver;
 	}
 	
+	/**
+	 * 打印数组
+	 * @param number
+	 */
 	public static void showNumber(char[] number){
 		//参数检查
 		if(number.length < 1 || number == null) return;
@@ -130,7 +135,42 @@ public class PrintMaxNumber {
 				System.out.print(number[i]);
 			}
 		}
-		System.out.print("");
+		System.out.print(" ");
+	}
+	
+	
+	/**
+  	 * 方法四：递归解法
+  	 *  思路：n位的所有十进制数, 就是0~9的全排列, 在输出 的时候去掉前面的0
+  	 */
+	public static void printD(int n){
+		//参数检查
+		if(n <= 0) return ;
+		char[] number = new char[n];
+		//全排列
+		for(int i = 0; i < 10; i++){
+			number[0] = (char)('0' + i);
+			print1ToNmaxNum(number, number.length - 1, 0);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param number
+	 * @param len
+	 * @param index 设置全排列初始值, 即从什么数来全排列
+	 */
+	public static void print1ToNmaxNum(char[] number, int len, int index){
+		//递归结束
+		if(index == len){
+			//打印
+			showNumber(number);
+			return;
+		}
+		for(int i = 0; i < 10; i++){
+			number[index + 1] = (char)('0' + i);
+			print1ToNmaxNum(number, len, index + 1);
+		}
 	}
 	
 	
