@@ -1,6 +1,6 @@
 package zuoye;
 
-import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  * commonsstring@gmail.com
@@ -17,12 +17,27 @@ public class ProblenOne2016 {
 
 	
 	public static void main(String[] args) {
+		int[] arr = new int[8];
 		
-		int[] arr = {4, 6, 2, 3 , 6, 7, 8, 1};
-		System.out.println(Arrays.toString(arr));
-		System.out.println(Arrays.toString(getSortArr(arr)));
-		System.out.println(Arrays.toString(arr));
+		Scanner in = new Scanner(System.in);
+		String str = in.nextLine();
+		handlerInput(new StringBuffer(str), arr);
+		getSortArr(arr);
 	}
+	
+	/**
+	 * 输入处理函数
+	 */
+	public static void handlerInput(StringBuffer in, int[] arr){
+		int j = 0;
+		for(int i = 0; i < in.length(); i++){
+			if(in.charAt(i) != ' '){
+				arr[j] = in.charAt(i) - '0';
+				j++;
+			}
+		}
+	}
+	
 	
 	/**
 	 * 方法一：分别在奇数位和偶数位置, 实现冒泡排序
