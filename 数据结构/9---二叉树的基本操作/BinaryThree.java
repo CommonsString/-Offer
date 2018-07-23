@@ -368,10 +368,10 @@ public class BinaryThree {
 			tempHead.setData(currentLeft.getData());
 			//删除currentLeft, 
 			if(parent.getLeft() == currentLeft){
-				//父节点的左孩子, 指向删除节点的右孩子
+				//有左子树，且左子树有右子树。
 				parent.setLeft(currentLeft.getRight());
 			}else{
-				//父节点的右孩子, 指向删除节点的左孩子
+				//无左子树
 				parent.setRight(currentLeft.getRight());
 			}
 			del = null;
