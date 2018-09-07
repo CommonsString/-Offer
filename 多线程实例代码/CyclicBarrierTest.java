@@ -12,7 +12,10 @@ public class CyclicBarrierTest {
 	public final static int count = 10;
 	
 	//等待线程数
-	public static CyclicBarrier ba = new CyclicBarrier(5);
+	public static CyclicBarrier ba = new CyclicBarrier(5, () -> {
+		//线程达到屏障, 有限执行该代码
+		System.out.println("优先执行！");
+	});
 	
 	public static void main(String[] args) throws InterruptedException {
 		ExecutorService pool = Executors.newCachedThreadPool();
